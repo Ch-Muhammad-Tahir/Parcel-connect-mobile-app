@@ -47,7 +47,7 @@ class BriefTileView extends StatelessWidget {
                     MyCustomText(
                       textAlign: TextAlign.center,
                       text:
-                          "${brief.sender.senderAddress}, + ${brief.sender.senderCity}",
+                          "${brief.sender!.senderAddress}, + ${brief.sender!.senderCity}",
                       fontSize: screenSize * 0.035,
                       fontWeight: FontWeight.w500,
                     ),
@@ -65,7 +65,7 @@ class BriefTileView extends StatelessWidget {
                     MyCustomText(
                       textAlign: TextAlign.center,
                       text:
-                          "${brief.receiver.receiverAddress}, + ${brief.receiver.receiverCity}",
+                          "${brief.receiver!.receiverAddress}, + ${brief.receiver!.receiverCity}",
                       fontSize: screenSize * 0.035,
                       fontWeight: FontWeight.w500,
                     ),

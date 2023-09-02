@@ -1,4 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp_parcel_connect/services/firebase_manager.dart';
 import '../../models/brief_model.dart';
 import '../../models/receiver_model.dart';
 import '../../models/sender_model.dart';
@@ -104,6 +106,16 @@ class SendParcelProvider extends ChangeNotifier {
       } else {
         this.cost = cost;
         postBrief();
+        FirebaseManager.storeBriefsOnFirebase(
+            brief: BriefModel.add(
+                parcelSize: parcelSize!,
+                parcelCategory: parcelCategory!,
+                itemName: itemName!,
+                parcelValue: parcelValue!,
+                cost: cost!,
+                sender: sender!,
+                receiver: receiver!));
+
         for (int i = 0; i < 6; i++) {
           Navigator.pop(context);
         }
@@ -112,7 +124,7 @@ class SendParcelProvider extends ChangeNotifier {
   }
 
   void postBrief() {
-    briefs.add(BriefModel(
+    briefs.add(BriefModel.add(
         parcelSize: parcelSize!,
         parcelCategory: parcelCategory!,
         itemName: itemName!,

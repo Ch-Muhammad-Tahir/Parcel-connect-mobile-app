@@ -1,5 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp_parcel_connect/providers/authentication_provider.dart';
+import 'package:fyp_parcel_connect/utils/helper_functions.dart';
+import 'package:provider/provider.dart';
 import '../../utils/app_assets.dart';
 import '../../utils/media_query.dart';
 import '../../views/home_page/home_screen.dart';
@@ -8,6 +11,7 @@ import '../../widgets/my_custom_text.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
+import '../authentication_screen/authentication_screen_widget.dart';
 import '../home_page/nav_bar_screens.dart';
 import '../traveler_screens/login_screen/traveler_login_screen.dart';
 
@@ -76,13 +80,20 @@ class LoginScreenWidget extends StatelessWidget {
                     vertical: GetScreenSize.getScreenWidth(context) * 0.03),
                 width: GetScreenSize.getScreenWidth(context) * 0.5,
                 onTab: () {
-                  if (formKey.currentState!.validate()) {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const BottomNavBarScreenWidgets()));
-                  }
+                  Provider.of<AuthenticationProvider>(context, listen: false)
+                      .fabLoginOnPressed(phoneNumber, context)
+                      .then((isVaid) {
+                    print("Number $isVaid");
+                    if (isVaid) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  OtpAuthenticationScreenWidget()));
+                    } else {
+                      AppHelperFunction.showToast("InValid Number", context);
+                    }
+                  });
                 },
                 buttonText: "Login",
                 buttonColor: Colors.blue,

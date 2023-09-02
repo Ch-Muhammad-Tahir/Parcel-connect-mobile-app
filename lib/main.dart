@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp_parcel_connect/providers/authentication_provider.dart';
 import '../firebase_options.dart';
 import '../providers/on_boarding_provider.dart';
 import '../providers/send_parcel_provide.dart';
@@ -21,6 +22,8 @@ void main(List<String> args) async {
             create: (context) => OnBoardingProvider()),
         ChangeNotifierProvider<SendParcelProvider>(
             create: (context) => SendParcelProvider()),
+        ChangeNotifierProvider<AuthenticationProvider>(
+            create: (context) => AuthenticationProvider()),
       ],
       child: const MaterialApp(
         home: SplashScreen(),

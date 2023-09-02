@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/parcel_size_model.dart';
 import '../../utils/app_assets.dart';
-import 'package:line_icons/line_icon.dart';
 
 class AppConstants {
   static List<String> title = [

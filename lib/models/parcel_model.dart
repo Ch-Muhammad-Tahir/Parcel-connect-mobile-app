@@ -1,4 +1,3 @@
-import '../../models/parcel_size_model.dart';
 import '../../models/receiver_model.dart';
 import '../../models/sender_model.dart';
 

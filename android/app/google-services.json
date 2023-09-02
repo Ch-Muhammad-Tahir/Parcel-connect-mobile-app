@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "561242041363",
+    "project_id": "fyp-parcel-connect",
+    "storage_bucket": "fyp-parcel-connect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561242041363:android:59b2cbcda92890db0ba3e6",
+        "android_client_info": {
+          "package_name": "com.example.fyp_parcel_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561242041363-svuvdlsm0gi2iue3hpqkfnd7mdpinqd0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC15OMl0G29whRqg-3ggXTDIsbZGqpCUUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "561242041363-svuvdlsm0gi2iue3hpqkfnd7mdpinqd0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/send_parcel_provide.dart';
 import '../../../utils/media_query.dart';
+import '../traveler_bid_details/traveler_bid_details_screen_widget.dart';
 
 class TravelerBidsScreenWidget extends StatefulWidget {
   const TravelerBidsScreenWidget({super.key});
@@ -26,7 +27,9 @@ class _TravelerBidsScreenWidgetState extends State<TravelerBidsScreenWidget> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: const Text('Bids'),
+          title: const Text(
+            'Bids',
+          ),
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           elevation: 0,
@@ -44,7 +47,17 @@ class _TravelerBidsScreenWidgetState extends State<TravelerBidsScreenWidget> {
                 return ListView.separated(
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return BriefTileView(brief: provider.briefs[index]);
+                      return BriefTileView(
+                        onTab: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TravelerPostBid(
+                                        brief: provider.briefs[index],
+                                      )));
+                        },
+                        brief: provider.briefs[index],
+                      );
                     },
                     separatorBuilder: (context, index) {
                       return const SizedBox(

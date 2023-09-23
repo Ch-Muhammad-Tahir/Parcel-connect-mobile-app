@@ -238,4 +238,31 @@ class FirebaseManager {
 
     return imageUrls;
   }
+
+  static void postTravelerBid(
+      String bid, String briefId, BuildContext context) async {
+    var collection = FirebaseFirestore.instance.collection("traveler_bids");
+    var id = collection.doc().id;
+    await collection.doc(id).set({
+      "bid": bid,
+      "traveler_bid_id": id,
+      "brief_id": briefId,
+    }).whenComplete(() => showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Your Bid Successfully post"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          },
+        ));
+  }
 }

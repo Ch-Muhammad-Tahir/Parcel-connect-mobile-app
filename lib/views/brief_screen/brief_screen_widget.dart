@@ -34,7 +34,8 @@ class BriefScreenWidget extends StatelessWidget {
             : Consumer<SendParcelProvider>(builder: (context, provider, child) {
                 return ListView.separated(
                     itemBuilder: (context, index) {
-                      return BriefTileView(brief: provider.briefs[index]);
+                      return BriefTileView(
+                          onTab: () {}, brief: provider.briefs[index]);
                     },
                     separatorBuilder: (context, index) {
                       return const SizedBox(

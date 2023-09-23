@@ -9,4 +9,8 @@ class TravelerProvider extends ChangeNotifier {
   void getAllBriefs() async {
     briefs = await FirebaseManager.getAllBriefs();
   }
+
+  void postTravelerBid(String bid, String briefId, BuildContext context) {
+    FirebaseManager.postTravelerBid(bid, briefId, context);
+  }
 }

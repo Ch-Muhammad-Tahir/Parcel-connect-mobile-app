@@ -4,9 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_parcel_connect/providers/traveler_auth_provider.dart';
 import 'package:fyp_parcel_connect/utils/helper_functions.dart';
-import 'package:fyp_parcel_connect/views/traveler_screens/traveler_home_page_screen/home_page_screen_widget.dart';
 import 'package:provider/provider.dart';
-
 import '../../../services/firebase_manager.dart';
 import '../sign_up_screen/traveler_sign_up_screen.dart';
 

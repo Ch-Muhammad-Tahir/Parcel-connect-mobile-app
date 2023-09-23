@@ -1,28 +1,27 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fyp_parcel_connect/providers/traveler_auth_provider.dart';
+import 'package:fyp_parcel_connect/utils/helper_functions.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class TravelerVerificationScreen extends StatefulWidget {
-  TravelerVerificationScreen({super.key});
+  const TravelerVerificationScreen({super.key});
 
   @override
   _VerificationScreenState createState() => _VerificationScreenState();
 }
 
 class _VerificationScreenState extends State<TravelerVerificationScreen> {
-  final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController phoneNumberController = TextEditingController();
-  final TextEditingController cnicController = TextEditingController();
-
   File? _profileImage;
   File? _documentImage;
 
   final picker = ImagePicker();
 
   Future getProfileImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       if (pickedFile != null) {
@@ -34,7 +33,7 @@ class _VerificationScreenState extends State<TravelerVerificationScreen> {
   }
 
   Future getDocumentImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       if (pickedFile != null) {
@@ -61,32 +60,14 @@ class _VerificationScreenState extends State<TravelerVerificationScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              TextField(
-                controller: fullNameController,
-                decoration: const InputDecoration(labelText: 'Full Name'),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: addressController,
-                decoration: const InputDecoration(labelText: 'Address'),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: phoneNumberController,
-                keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(labelText: 'Phone Number'),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: cnicController,
-                keyboardType: TextInputType.text,
-                decoration: const InputDecoration(labelText: 'CNIC'),
-              ),
               if (_profileImage != null)
-                Image.file(
-                  _profileImage!,
-                  height: 300,
-                  width: 300,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(45),
+                  child: Image.file(
+                    _profileImage!,
+                    height: 300,
+                    width: 300,
+                  ),
                 ),
               ElevatedButton(
                 onPressed: getProfileImage,
@@ -103,8 +84,27 @@ class _VerificationScreenState extends State<TravelerVerificationScreen> {
                 child: const Text('Take Document Picture'),
               ),
               ElevatedButton(
-                onPressed: () {
-                  // Navigate to sign up screen
+                onPressed: () async {
+                  if (_profileImage == null || _documentImage == null) {
+                    AppHelperFunction.showToast(
+                        "Document or Profile is Empty!. Please Upload Both Things",
+                        context);
+                  } else {
+                    Provider.of<TravelerAuthProvider>(context, listen: false)
+                        .getDocuments(_profileImage!, _documentImage!);
+
+                    log(_profileImage!.path);
+                    log(_documentImage!.path);
+                    await Provider.of<TravelerAuthProvider>(context,
+                            listen: false)
+                        .singUpTraveler();
+                    // ignore: use_build_context_synchronously
+                    AppHelperFunction.showToast(
+                        "User Successfully SingUp", context);
+                    for (int i = 0; i < 2; i++) {
+                      Navigator.pop(context);
+                    }
+                  }
                 },
                 child: const Text('Sign Up'),
               )

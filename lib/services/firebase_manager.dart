@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fyp_parcel_connect/models/brief_model.dart';
 
+import '../models/travelerModel.dart';
 import '../utils/helper_functions.dart';
+import '../views/traveler_screens/traveler_home_page_screen/traveler_nav_bar_screens.dart';
 
 class FirebaseManager {
   static late String userPhoneNumber;
@@ -85,22 +87,6 @@ class FirebaseManager {
       )
       ..addAll({"briefId": id}));
   }
-  // static Future<void> sendMessage(
-  //     {required String message,
-  //     required String reciverId,
-  //     required String chatRoomId}) async {
-  //   var chatRoomCollection = FirebaseFirestore.instance
-  //       .collection("chats")
-  //       .doc(chatRoomId)
-  //       .collection("messages");
-  //   chatRoomCollection.add({
-  //     "senderUid": currentUserUid,
-  //     "reciverUid": reciverId,
-  //     "messageText": message,
-  //     "isRead": false,
-  //     "timeStamp": FieldValue.serverTimestamp(),
-  //   });
-  // }
 
   static Future<dynamic> storeImageOnFirebaseCloud(File imagePath) async {
     final Reference storageRefrence = FirebaseStorage.instance.ref().child(
@@ -142,47 +128,114 @@ class FirebaseManager {
     }
   }
 
-  // static Stream<QuerySnapshot> getMessages(String userId, String otherUserId) {
-  //   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  //   List<String> ids = [userId, otherUserId];
-  //   ids.sort();
-  //   String chatroomId = ids.join("_");
+  static Future<List<BriefModel>> getAllBriefs() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      final collection = FirebaseFirestore.instance.collection("Briefs");
+      final querySnapshot = await collection.get();
 
-  //   return firestore
-  //       .collection("chats")
-  //       .doc(chatroomId)
-  //       .collection("messages")
-  //       .orderBy("timeStamp", descending: false)
-  //       .snapshots();
-  // }
+      return querySnapshot.docs.map((doc) {
+        return BriefModel.fromJson(doc.data());
+      }).toList();
+    } else {
+      // Handle the case where the user is not logged in.
+      return [];
+    }
+  }
 
-  // static CollectionReference getChatMessages({required String chatRoomId}) {
-  //   CollectionReference messagesCollectionReference = FirebaseFirestore.instance
-  //       .collection("chats")
-  //       .doc(chatRoomId)
-  //       .collection("messages");
-  //   return messagesCollectionReference;
-  // }
+  static Future<void> travelerSignIn(
+      String email, String password, BuildContext context) async {
+    try {
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      if (context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                settings: const RouteSettings(name: "/travelerHomeScreen"),
+                builder: (context) =>
+                    const TravelerBottomNavBarScreenWidgets()),
+            (Route<dynamic> route) => false);
+      }
+      print('No user found for that email.');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        AppHelperFunction.showToast("No user found for that email.", context);
+      } else if (e.code == 'wrong-password') {
+        AppHelperFunction.showToast(
+            'Wrong password provided for that user.', context);
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
 
-  // static Map<String, dynamic>? getLastMessage(String chatRoomId) {
-  //   Map<String, dynamic>? recentMessage;
-  //   final messagesRef = FirebaseFirestore.instance
-  //       .collection('chat')
-  //       .doc(chatRoomId)
-  //       .collection("messages")
-  //       .orderBy('timestamp', descending: true)
-  //       .limit(1)
-  //       .snapshots() // realtime update
-  //       .listen((querySnapshot) {
-  //     final lastMessage = querySnapshot.docs.first.data();
-  //     recentMessage = lastMessage;
-  //   });
-  //   return recentMessage;
-  // }
+  static void signUpTraveler(
+      {required TravelerModel travelerModel,
+      required File profile,
+      required File document}) async {
+    try {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: travelerModel.email,
+        password: travelerModel.password,
+      );
+      await storeTravelerDataOnFirebase(
+          traver: travelerModel,
+          profile: profile,
+          document: document,
+          uID: credential.user!.uid);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
-  // static Future<DocumentReference<Map<String, dynamic>>> getSpecificUserData(
-  //     String uId) async {
-  //   var doc = await FirebaseFirestore.instance.collection("users").doc(uId);
-  //   return doc;
-  // }
+  static Future<bool> storeTravelerDataOnFirebase(
+      {required TravelerModel traver,
+      required File profile,
+      required File document,
+      required String uID}) async {
+    List<String> imgPath =
+        await storeTravelerImagesOnFirebaseCloud(profile, document, uID);
+
+    var collection = FirebaseFirestore.instance.collection("traveler");
+    await collection.doc(uID).set({}
+      ..addAll(traver.toMap())
+      ..addAll({
+        "profileImage": imgPath[0],
+        "document": imgPath[1],
+      }));
+    if (collection.doc(currentUserUid).id == currentUserUid) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<List<String>> storeTravelerImagesOnFirebaseCloud(
+      File image1, File image2, String id) async {
+    List<String> imageUrls = [];
+
+    // Upload the first image
+    final Reference storageReference1 =
+        FirebaseStorage.instance.ref().child("images/$id/profile.png");
+    final UploadTask uploadTask1 = storageReference1.putFile(image1);
+    final TaskSnapshot snapshot1 = await uploadTask1;
+    final imgUrl1 = await snapshot1.ref.getDownloadURL();
+    imageUrls.add(imgUrl1);
+
+    // Upload the second image
+    final Reference storageReference2 =
+        FirebaseStorage.instance.ref().child("images/$id/cnic.png");
+    final UploadTask uploadTask2 = storageReference2.putFile(image2);
+    final TaskSnapshot snapshot2 = await uploadTask2;
+    final imgUrl2 = await snapshot2.ref.getDownloadURL();
+    imageUrls.add(imgUrl2);
+
+    return imageUrls;
+  }
 }

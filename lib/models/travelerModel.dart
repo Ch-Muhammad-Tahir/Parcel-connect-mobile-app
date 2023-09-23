@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class TravelerModel {
   String name = "";
   String email = "";
@@ -7,10 +5,12 @@ class TravelerModel {
   String address = "";
   String phoneNumber = "";
   String cnic = "";
-  String profile = "";
-
-  TravelerModel.add(
-    this.profile, {
+  // String? profileImage = "";
+  // String? document = "";
+  TravelerModel();
+  TravelerModel.add({
+    // this.profileImage,
+    // this.document,
     required this.name,
     required this.email,
     required this.password,
@@ -19,9 +19,12 @@ class TravelerModel {
     required this.cnic,
   });
 
-  TravelerModel.fromJson(Map<dynamic, String> json) {
+  TravelerModel.fromJson(Map<String, dynamic> json) {
     if (json["name"] is String || json["name"] is int) {
       name = json["name"].toString();
+    }
+    if (json["address"] is String || json["address"] is int) {
+      address = json["address"].toString();
     }
     if (json["email"] is String || json["email"] is int) {
       email = json["email"].toString();
@@ -35,21 +38,22 @@ class TravelerModel {
     if (json["cnic"] is String || json["cnic"] is int) {
       cnic = json["cnic"].toString();
     }
-    if (json["profile"] is String || json["profile"] is int) {
-      profile = json["profile"].toString();
-    }
+    // if (json["profileImage"] is String || json["profileImage"] is int) {
+    //   profileImage = json["profileImage"].toString();
+    // }
+    // if (json["document"] is String || json["document"] is int) {
+    //   document = json["document"].toString();
+    // }
   }
 
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> result = {
+    return {
       "name": name,
-      "email": email,
-      "password": password,
-      "phoneNumber": phoneNumber,
       "cnic": cnic,
-      "profile": profile
+      "phoneNumber": phoneNumber,
+      "password": password,
+      "email": email,
+      "address": address,
     };
-
-    return result;
   }
 }

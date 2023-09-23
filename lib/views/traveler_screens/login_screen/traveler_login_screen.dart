@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp_parcel_connect/providers/traveler_auth_provider.dart';
 import 'package:fyp_parcel_connect/utils/helper_functions.dart';
 import 'package:fyp_parcel_connect/views/traveler_screens/traveler_home_page_screen/home_page_screen_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../../../services/firebase_manager.dart';
 import '../sign_up_screen/traveler_sign_up_screen.dart';
@@ -67,18 +69,9 @@ class TravelerLoginScreen extends StatelessWidget {
                   AppHelperFunction.showToast(
                       "Email Or Password is Empty", context);
                 }
-                if (email.isValidEmail()) {
-                  if (password.isValidEmail()) {
-                    FirebaseManager.signInUser(email, password).whenComplete(
-                        () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const TravelerHomePageScreenWidget())));
-                  }
-                }
-
-                // Perform login logic here
+                print("ON Pressed Login");
+                Provider.of<TravelerAuthProvider>(context, listen: false)
+                    .travelerLogin(email, password, context);
               },
               child: const Text(
                 'Login',

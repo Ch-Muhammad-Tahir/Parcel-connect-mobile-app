@@ -49,6 +49,7 @@ class _OtpAuthenticationScreenWidgetState
     /// Optionally you can use form to validate the Pinput
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("OTP"),
         centerTitle: true,

@@ -4,13 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class TravelerVerificationScreen extends StatefulWidget {
-  const TravelerVerificationScreen({super.key});
+  TravelerVerificationScreen({super.key});
 
   @override
   _VerificationScreenState createState() => _VerificationScreenState();
 }
 
 class _VerificationScreenState extends State<TravelerVerificationScreen> {
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController cnicController = TextEditingController();
+
   File? _profileImage;
   File? _documentImage;
 
@@ -56,6 +61,27 @@ class _VerificationScreenState extends State<TravelerVerificationScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              TextField(
+                controller: fullNameController,
+                decoration: const InputDecoration(labelText: 'Full Name'),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: addressController,
+                decoration: const InputDecoration(labelText: 'Address'),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: phoneNumberController,
+                keyboardType: TextInputType.phone,
+                decoration: const InputDecoration(labelText: 'Phone Number'),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: cnicController,
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(labelText: 'CNIC'),
+              ),
               if (_profileImage != null)
                 Image.file(
                   _profileImage!,

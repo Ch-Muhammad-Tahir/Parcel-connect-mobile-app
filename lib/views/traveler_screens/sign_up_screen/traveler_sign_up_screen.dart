@@ -1,22 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../../services/firebase_manager.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../views/traveler_screens/sign_up_screen/verification_documents.dart';
 
 class TravelerSignUpScreen extends StatelessWidget {
-  final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController phoneNumberController = TextEditingController();
-  final TextEditingController cnicController = TextEditingController();
 
   TravelerSignUpScreen({super.key});
 
   void navigateToNextScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const TravelerVerificationScreen()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => TravelerVerificationScreen()));
     // Navigate to the next screen or perform next actions here
   }
 
@@ -32,64 +28,70 @@ class TravelerSignUpScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextField(
-                controller: fullNameController,
-                decoration: const InputDecoration(labelText: 'Full Name'),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(labelText: 'Email'),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: 'Password'),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: addressController,
-                decoration: const InputDecoration(labelText: 'Address'),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: phoneNumberController,
-                keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(labelText: 'Phone Number'),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: cnicController,
-                keyboardType: TextInputType.text,
-                decoration: const InputDecoration(labelText: 'CNIC'),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  if (fullNameController.text.isEmpty ||
-                      emailController.text.isEmpty ||
-                      passwordController.text.isEmpty ||
-                      addressController.text.isEmpty ||
-                      phoneNumberController.text.isEmpty ||
-                      cnicController.text.isEmpty) {
-                    AppHelperFunction.showToast(
-                        "Please Fill All Fields", context);
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 16),
+            TextField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Password'),
+            ),
+            const SizedBox(height: 16),
+            const Expanded(child: SizedBox()),
+            ElevatedButton(
+              onPressed: () async {
+                if (emailController.text.isEmpty ||
+                    passwordController.text.isEmpty) {
+                  AppHelperFunction.showToast(
+                      "Please Fill All Fields", context);
+                } else {
+                  String email = emailController.text.toString();
+                  String password = passwordController.text.toString();
+                  if (email.isValidEmail()) {
+                    if (password.isValidPassword()) {
+                      loader(true);
+                      try {
+                        await FirebaseManager.signUpOnFirebase(email, password)
+                            .then((value) {
+                          loader(false);
+                          Navigator.pop(context);
+                          AppHelperFunction.showToast(
+                              "User SuccessFully SignUp", context);
+                        });
+                      } on FirebaseAuthException catch (exception) {
+                        print(
+                            "Firebase Auth Exception ${exception.toString()}");
+                      }
+                    } else {
+                      AppHelperFunction.showToast(
+                          "Invalid Password format. password should contain minimum 8 Characters",
+                          context);
+                    }
                   } else {
-                    navigateToNextScreen(context);
+                    AppHelperFunction.showToast("InValid Email", context);
                   }
-                },
-                child: const Text('Next'),
-              ),
-            ],
-          ),
+
+                  //navigateToNextScreen(context);
+                }
+              },
+              child: const Text('Next'),
+            ),
+            const SizedBox(height: 24),
+          ],
         ),
       ),
     );
+  }
+
+  void loader(bool flag) {
+    flag ? const CircularProgressIndicator() : null;
   }
 }

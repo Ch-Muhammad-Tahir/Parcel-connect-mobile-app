@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_parcel_connect/providers/send_parcel_provide.dart';
+import 'package:provider/provider.dart';
 import '../../views/brief_screen/brief_screen_widget.dart';
 import '../../views/home_page/home_screen.dart';
 import '../../views/manage_parcel/manage_parcel_screens.dart';
@@ -16,6 +18,13 @@ class BottomNavBarScreenWidgets extends StatefulWidget {
 }
 
 class _BottomNavBarScreenWidgetsState extends State<BottomNavBarScreenWidgets> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    Provider.of<SendParcelProvider>(context, listen: false).getBriefs();
+    super.initState();
+  }
+
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
@@ -29,6 +38,9 @@ class _BottomNavBarScreenWidgetsState extends State<BottomNavBarScreenWidgets> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Provider.of<SendParcelProvider>(context, listen: false).getBriefs();
+      }),
       backgroundColor: Colors.white,
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),

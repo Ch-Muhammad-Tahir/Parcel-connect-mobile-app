@@ -15,6 +15,7 @@ class BriefScreenWidget extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           centerTitle: true,
           title: const Text("Briefs"),
           foregroundColor: Colors.black,
@@ -36,7 +37,7 @@ class BriefScreenWidget extends StatelessWidget {
                       return BriefTileView(brief: provider.briefs[index]);
                     },
                     separatorBuilder: (context, index) {
-                      return SizedBox(
+                      return const SizedBox(
                         height: 10,
                       );
                     },

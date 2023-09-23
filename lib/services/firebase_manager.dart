@@ -78,9 +78,13 @@ class FirebaseManager {
 
   static Future<void> storeBriefsOnFirebase({required BriefModel brief}) async {
     var collection = FirebaseFirestore.instance.collection("Briefs");
-    await collection.add(brief.toMap());
+    var id = collection.doc().id;
+    await collection.doc(id).set({}
+      ..addAll(
+        brief.toMap(),
+      )
+      ..addAll({"briefId": id}));
   }
-
   // static Future<void> sendMessage(
   //     {required String message,
   //     required String reciverId,
@@ -105,6 +109,37 @@ class FirebaseManager {
     final TaskSnapshot snapshot = await uploadTask;
     final imgUrl = await snapshot.ref.getDownloadURL();
     return imgUrl;
+  }
+
+  static Future<UserCredential> signUpOnFirebase(
+      String email, String password) async {
+    return await firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
+  }
+
+  static Future<UserCredential> signInUser(
+      String email, String password) async {
+    print("Hello");
+    return await firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
+  }
+
+  static Future<List<BriefModel>> getBriefsForCurrentUser() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      final userId = currentUser.uid;
+      final collection = FirebaseFirestore.instance.collection("Briefs");
+
+      final querySnapshot =
+          await collection.where("userId", isEqualTo: userId).get();
+
+      return querySnapshot.docs.map((doc) {
+        return BriefModel.fromJson(doc.data());
+      }).toList();
+    } else {
+      // Handle the case where the user is not logged in.
+      return [];
+    }
   }
 
   // static Stream<QuerySnapshot> getMessages(String userId, String otherUserId) {

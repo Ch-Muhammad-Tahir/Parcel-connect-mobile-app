@@ -1,6 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp_parcel_connect/utils/helper_functions.dart';
+import 'package:fyp_parcel_connect/views/traveler_screens/traveler_home_page_screen/home_page_screen_widget.dart';
 
+import '../../../services/firebase_manager.dart';
 import '../sign_up_screen/traveler_sign_up_screen.dart';
 
 class TravelerLoginScreen extends StatelessWidget {
@@ -24,7 +29,7 @@ class TravelerLoginScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,9 +57,27 @@ class TravelerLoginScreen extends StatelessWidget {
                 suffixIcon: Icon(Icons.visibility_off),
               ),
             ),
-            const SizedBox(height: 40),
+            const Expanded(child: SizedBox()),
             ElevatedButton(
               onPressed: () {
+                String email = emailController.text.trim();
+                String password = passwordController.text.trim();
+
+                if (email.isEmpty || password.isEmpty) {
+                  AppHelperFunction.showToast(
+                      "Email Or Password is Empty", context);
+                }
+                if (email.isValidEmail()) {
+                  if (password.isValidEmail()) {
+                    FirebaseManager.signInUser(email, password).whenComplete(
+                        () => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const TravelerHomePageScreenWidget())));
+                  }
+                }
+
                 // Perform login logic here
               },
               child: const Text(
@@ -63,34 +86,32 @@ class TravelerLoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: RichText(
-                  text: TextSpan(
-                      text: 'Don\'t have an account? ',
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: 'Sign Up',
-                            style: const TextStyle(
-                                color: Colors.blueAccent, fontSize: 16),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            TravelerSignUpScreen()));
-                                // navigate to desired screen
-                              }),
-                      ]),
-                ),
+            Align(
+              alignment: Alignment.center,
+              child: RichText(
+                text: TextSpan(
+                    text: 'Don\'t have an account? ',
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: 'Sign Up',
+                          style: const TextStyle(
+                              color: Colors.blueAccent, fontSize: 16),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          TravelerSignUpScreen()));
+                              // navigate to desired screen
+                            }),
+                    ]),
               ),
             ),
+            const SizedBox(height: 80),
           ],
         ),
       ),

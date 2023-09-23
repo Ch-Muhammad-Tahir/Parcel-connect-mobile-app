@@ -24,6 +24,7 @@ class LoginScreenWidget extends StatelessWidget {
     var screenSize = GetScreenSize.getScreenWidth(context);
     return SafeArea(
         child: Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Form(
         key: formKey,
         child: Padding(

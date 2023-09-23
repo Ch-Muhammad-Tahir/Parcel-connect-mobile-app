@@ -7,6 +7,7 @@ import '../models/sender_model.dart';
 
 class BriefModel {
   String parcelSize = "";
+  String bid = "";
   String parcelCategory = "";
   String itemName = "";
   String parcelValue = "";
@@ -33,10 +34,10 @@ class BriefModel {
       itemName = json["itemName"].toString();
     }
     if (json["parcelValue"] is String || json["parcelValue"] is int) {
-      itemName = json["parcelValue"].toString();
+      parcelValue = json["parcelValue"].toString();
     }
     if (json["cost"] is String || json["cost"] is int) {
-      itemName = json["cost"].toString();
+      cost = json["cost"].toString();
     }
     if (json["sender"] is Object) {
       sender = SenderModel.fromJson(json["sender"]);

@@ -105,7 +105,7 @@ class SendParcelProvider extends ChangeNotifier {
         AppHelperFunction.showToast("Invalid Cost", context);
       } else {
         this.cost = cost;
-        postBrief();
+        // postBrief();
         FirebaseManager.storeBriefsOnFirebase(
             brief: BriefModel.add(
                 parcelSize: parcelSize!,
@@ -115,12 +115,16 @@ class SendParcelProvider extends ChangeNotifier {
                 cost: cost!,
                 sender: sender!,
                 receiver: receiver!));
-
         for (int i = 0; i < 6; i++) {
           Navigator.pop(context);
         }
       }
     }
+  }
+
+  void getBriefs() async {
+    briefs = await FirebaseManager.getBriefsForCurrentUser();
+    print(briefs.length);
   }
 
   void postBrief() {

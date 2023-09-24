@@ -244,6 +244,7 @@ class FirebaseManager {
     var collection = FirebaseFirestore.instance.collection("traveler_bids");
     var id = collection.doc().id;
     await collection.doc(id).set({
+      "traveler_id": firebaseAuth.currentUser!.uid,
       "bid": bid,
       "traveler_bid_id": id,
       "brief_id": briefId,

@@ -5,6 +5,7 @@ import '../../widgets/my_custom_text.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:provider/provider.dart';
 
+import '../view_bids_screen/view_bids_screen.dart';
 import 'brief_screen_widget/brief_tile_view.dart';
 
 class BriefScreenWidget extends StatelessWidget {
@@ -35,7 +36,15 @@ class BriefScreenWidget extends StatelessWidget {
                 return ListView.separated(
                     itemBuilder: (context, index) {
                       return BriefTileView(
-                          onTab: () {}, brief: provider.briefs[index]);
+                          onTab: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ViewBidsScreenWidget(
+                                          brief: provider.briefs[index],
+                                        )));
+                          },
+                          brief: provider.briefs[index]);
                     },
                     separatorBuilder: (context, index) {
                       return const SizedBox(

@@ -1,6 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:fyp_parcel_connect/services/firebase_manager.dart';
+import '../services/firebase_manager.dart';
 import '../../models/brief_model.dart';
 import '../../models/receiver_model.dart';
 import '../../models/sender_model.dart';
@@ -8,6 +7,7 @@ import '../../utils/helper_functions.dart';
 import '../../views/send_parcel_screen/check_out_parcel_screen.dart';
 import '../../views/send_parcel_screen/receiver_details_screen.dart';
 import '../../views/send_parcel_screen/sender_details.dart';
+import '../models/traveler_bid.dart';
 
 class SendParcelProvider extends ChangeNotifier {
   String? parcelSize;
@@ -18,6 +18,7 @@ class SendParcelProvider extends ChangeNotifier {
   SenderModel? sender;
   ReceiverModel? receiver;
   List<BriefModel> briefs = [];
+  List<TravelerBid> travelerBids = [];
 
   void selectParcelSize(String parcelSize) {
     this.parcelSize = parcelSize;
@@ -157,5 +158,15 @@ class SendParcelProvider extends ChangeNotifier {
                 builder: (context) => SenderDetailsScreenWidget()));
       }
     }
+  }
+
+  void getTravelersBid(String currentBriefID) async {
+    travelerBids = await FirebaseManager.getBidsByBriefID(currentBriefID);
+    notifyListeners();
+    print(travelerBids.length);
+  }
+
+  void getTravelerByID(String id) async {
+    await FirebaseManager.getTravelerByUID(id);
   }
 }

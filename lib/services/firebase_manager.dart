@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fyp_parcel_connect/models/brief_model.dart';
 
 import '../models/travelerModel.dart';
+import '../models/traveler_bid.dart';
 import '../utils/helper_functions.dart';
 import '../views/traveler_screens/traveler_home_page_screen/traveler_nav_bar_screens.dart';
 
@@ -266,5 +267,45 @@ class FirebaseManager {
             );
           },
         ));
+  }
+
+  static Future<List<TravelerBid>> getBidsByBriefID(
+      String currentBriefID) async {
+    List<TravelerBid> bids = [];
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection("traveler_bids")
+          .where("brief_id", isEqualTo: currentBriefID)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        bids = querySnapshot.docs
+            .map((doc) =>
+                TravelerBid.fromJos(doc.data() as Map<String, dynamic>))
+            .toList();
+      }
+    } catch (e) {
+      print("Error retrieving bids: $e");
+    }
+    return bids;
+  }
+
+  static Future<TravelerModel?> getTravelerByUID(String givenUID) async {
+    try {
+      var collection = FirebaseFirestore.instance.collection("traveler");
+      var documentSnapshot = await collection.doc(givenUID).get();
+
+      if (documentSnapshot.exists) {
+        var travelerData = TravelerModel.fromJson(
+            documentSnapshot.data() as Map<String, dynamic>);
+        return travelerData;
+      } else {
+        // Traveler document with the given UID does not exist.
+        return null;
+      }
+    } catch (e) {
+      print("Error fetching traveler data: $e");
+      return null;
+    }
   }
 }

@@ -3,7 +3,6 @@ import 'package:fyp_parcel_connect/providers/traveler_provider.dart';
 import 'package:fyp_parcel_connect/views/brief_screen/brief_screen_widget/brief_tile_view.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/send_parcel_provide.dart';
 import '../../../utils/media_query.dart';
 import '../traveler_bid_details/traveler_bid_details_screen_widget.dart';
 

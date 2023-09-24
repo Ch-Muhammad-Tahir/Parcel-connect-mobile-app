@@ -3,16 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:fyp_parcel_connect/providers/authentication_provider.dart';
 import 'package:fyp_parcel_connect/utils/helper_functions.dart';
 import 'package:provider/provider.dart';
-import '../../utils/app_assets.dart';
+
 import '../../utils/media_query.dart';
-import '../../views/home_page/home_screen.dart';
 import '../../widgets/custom_button.dart';
-import '../../widgets/my_custom_text.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
 import '../authentication_screen/authentication_screen_widget.dart';
-import '../home_page/nav_bar_screens.dart';
 import '../traveler_screens/login_screen/traveler_login_screen.dart';
 
 class LoginScreenWidget extends StatelessWidget {

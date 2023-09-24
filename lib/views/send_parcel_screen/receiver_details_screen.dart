@@ -1,9 +1,7 @@
-import 'package:bottom_picker/bottom_picker.dart';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../providers/send_parcel_provide.dart';
 import '../../utils/media_query.dart';
@@ -12,6 +10,7 @@ import '../../widgets/custom_sized_box.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/my_custom_text.dart';
 
+// ignore: must_be_immutable
 class ReceiverDetailsScreenWidget extends StatelessWidget {
   String countryValue = "";
   String? stateValue = "";

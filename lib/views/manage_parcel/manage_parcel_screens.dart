@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../utils/media_query.dart';
-import '../../../widgets/my_custom_text.dart';
 
 class ManageParcelScreen extends StatelessWidget {
   const ManageParcelScreen({super.key});

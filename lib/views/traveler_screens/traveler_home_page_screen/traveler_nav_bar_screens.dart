@@ -27,8 +27,8 @@ class _BottomNavBarScreenWidgetsState
   }
 
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
+  // static const TextStyle optionStyle =
+  //     TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static const List<Widget> _widgetOptions = <Widget>[
     TravelerHomeScreenWidget(),
     TravelerBidsScreenWidget(),

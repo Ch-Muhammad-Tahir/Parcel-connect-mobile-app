@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../providers/send_parcel_provide.dart';
 import '../../utils/media_query.dart';
-import '../../views/send_parcel_screen/sender_details.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_sized_box.dart';
 import '../../widgets/my_custom_text.dart';

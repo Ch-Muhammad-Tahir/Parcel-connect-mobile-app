@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../providers/on_boarding_provider.dart';
-import '../../views/home_page/home_screen.dart';
+
 import '../../views/login_screen/login_screen.dart';
 import 'package:provider/provider.dart';
 import '../../utils/media_query.dart';

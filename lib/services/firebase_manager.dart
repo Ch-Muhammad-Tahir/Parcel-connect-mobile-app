@@ -248,6 +248,7 @@ class FirebaseManager {
       "bid": bid,
       "traveler_bid_id": id,
       "brief_id": briefId,
+      "timeStamp": Timestamp.now()
     }).whenComplete(() => showDialog(
           context: context,
           builder: (context) {
@@ -259,7 +260,7 @@ class FirebaseManager {
                     Navigator.of(context).pop(); // Close the dialog
                     Navigator.of(context).pop(); // Close the dialog
                   },
-                  child: Text("OK"),
+                  child: const Text("OK"),
                 ),
               ],
             );

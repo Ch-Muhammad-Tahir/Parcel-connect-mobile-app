@@ -48,6 +48,9 @@ class BriefModel {
     if (json["timeStamp"] is Timestamp) {
       timeStamp = json["timeStamp"];
     }
+    if (json["briefId"] is String || json["briefId"] is int) {
+      bid = json["briefId"];
+    }
   }
 
   Map<String, dynamic> toMap() {

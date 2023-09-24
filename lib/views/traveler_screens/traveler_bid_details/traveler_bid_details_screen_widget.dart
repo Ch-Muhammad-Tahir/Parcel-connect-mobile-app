@@ -79,6 +79,7 @@ class TravelerPostBid extends StatelessWidget {
                 child: ElevatedButton(
                     onPressed: () {
                       String bid = controller.text.trim().toString();
+                      print("Brief ID ${brief.bid}");
                       if (bid.isEmpty) {
                         showDialog(
                           context: context,
